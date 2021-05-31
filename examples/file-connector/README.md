@@ -1,4 +1,4 @@
-# file-connector deploy exampe
+# file-connector deploy example
 
 `docker-compose up`
 
