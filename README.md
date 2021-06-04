@@ -8,3 +8,4 @@ Features:
 - Deploy all connectors files from a directory
 - Startup wait time, to wait for Kafka Connect readiness
 - Configurable retry requests to Kafka Connect
+
