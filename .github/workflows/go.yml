@@ -28,22 +28,6 @@ jobs:
       - name: Test
         run: go test -v ./...
 
-      - name: Release
-        uses: docker://antonyurchenko/git-release:v3.5.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DRAFT_RELEASE: "false"
-          PRE_RELEASE: "false"
-          CHANGELOG_FILE: "CHANGELOG.md"
-          ALLOW_EMPTY_CHANGELOG: "false"
-          ALLOW_TAG_PREFIX: "false"
-        with:
-          args: |
-            build/*.zip
-
-      - name: Extract Git Tag
-        run: echo "GIT_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
-
       - name: Log in to GitHub Docker Registry
         uses: docker/login-action@v1
         with:
@@ -52,9 +36,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build container image
-        uses: docker/build-push-action@v2
+        uses: elgohr/Publish-Docker-Github-Action@master
         with:
-          push: true
-          tags: |
-            docker.pkg.github.com/${{ github.repository }}/connector-deployer:${{ env.GIT_TAG }}
-            docker.pkg.github.com/${{ github.repository }}/connector-deployer:latest
+          name: kafka-connect-deployer/connector-deployer
+          tag_semver: true
