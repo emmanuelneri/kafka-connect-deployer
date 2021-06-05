@@ -59,7 +59,11 @@ func (k *KafkaConnectDeployer) deploy(fileName string) {
 	if err != nil {
 		log.Fatal("fail to open file: "+fileName, err)
 	}
-	defer file.Close()
+	defer func() {
+		if err := file.Close(); err != nil {
+			log.Printf("fail on close file %v \n", err)
+		}
+	}()
 
 	fileBody, err := ioutil.ReadAll(file)
 	if err != nil {
@@ -73,7 +77,10 @@ func (k *KafkaConnectDeployer) deploy(fileName string) {
 
 	if res.StatusCode > 299 {
 		bodyBuf := new(bytes.Buffer)
-		bodyBuf.ReadFrom(res.Body)
+		if _, err := bodyBuf.ReadFrom(res.Body); err != nil {
+			log.Fatal(fmt.Sprintf("response not ok and fail to open body: %s - code: %d: - error: %v", fileName, res.StatusCode, err))
+		}
+
 		log.Fatal(fmt.Sprintf("response not ok: %s - code: %d - body: %s", fileName, res.StatusCode, bodyBuf.String()))
 	}
 
