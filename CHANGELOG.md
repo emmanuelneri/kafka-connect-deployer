@@ -6,5 +6,10 @@
 ### Fixed
 - Fix pipeline
 
+## [0.0.3] - 2021-06-23
+### Fixed
+- Fix pipeline
+
 [0.0.1]: https://github.com/emmanuelneri/kafka-connect-deployer/releases/tag/v0.0.1
 [0.0.2]: https://github.com/emmanuelneri/kafka-connect-deployer/releases/tag/v0.0.2
+[0.0.3]: https://github.com/emmanuelneri/kafka-connect-deployer/releases/tag/v0.0.3
