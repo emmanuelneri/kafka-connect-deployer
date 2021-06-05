@@ -4,7 +4,6 @@ import (
 	"kafka-connect-deployer/internal/config"
 	"kafka-connect-deployer/internal/deployer"
 	"log"
-	"time"
 )
 
 func main() {
@@ -12,12 +11,7 @@ func main() {
 
 	c, err := config.New()
 	if err != nil {
-		log.Panic(err)
-	}
-
-	if c.WaitStartTime > time.Nanosecond {
-		log.Printf("waiting %s before start", c.WaitStartTime)
-		time.Sleep(c.WaitStartTime)
+		log.Fatal("fail on start configuration", err)
 	}
 
 	d := deployer.New(c)

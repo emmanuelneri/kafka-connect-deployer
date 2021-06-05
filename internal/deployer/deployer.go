@@ -42,9 +42,14 @@ func New(config config.Config) Deployer {
 }
 
 func (k *KafkaConnectDeployer) Deploy() {
+	if k.config.WaitStartTime > time.Nanosecond {
+		log.Printf("waiting %s before start", k.config.WaitStartTime)
+		time.Sleep(k.config.WaitStartTime)
+	}
+
 	files, err := ioutil.ReadDir(k.config.ConnectorsDir)
 	if err != nil {
-		log.Panic("invalid dir: "+k.config.ConnectorsDir, err)
+		log.Fatal("invalid dir: "+k.config.ConnectorsDir, err)
 	}
 
 	for _, file := range files {
