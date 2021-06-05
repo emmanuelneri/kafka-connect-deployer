@@ -8,8 +8,9 @@ import (
 )
 
 const (
-	DefaultUrl      = "http://localhost:8083"
-	DefaultMaxRetry = 3
+	DefaultUrl           = "http://localhost:8083"
+	DefaultMaxRetry      = 3
+	DefaultWaitStartTime = 1 * time.Nanosecond
 )
 
 type Config struct {

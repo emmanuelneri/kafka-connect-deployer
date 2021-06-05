@@ -11,10 +11,11 @@ func main() {
 
 	c, err := config.New()
 	if err != nil {
-		log.Fatal("fail on start configuration", err)
+		log.Fatal("fail on start configuration ", err)
 	}
 
 	d := deployer.New(c)
-	d.Deploy()
-
+	if err := d.Deploy(); err != nil {
+		log.Fatal("deploy fail ", err)
+	}
 }
