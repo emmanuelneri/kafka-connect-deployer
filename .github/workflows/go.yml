@@ -1,10 +1,6 @@
-name: Go
+name: Deployer CI
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: push
 
 env:
   GO_VERSION: 1.16
@@ -28,23 +24,18 @@ jobs:
         run: go test -v ./...
 
       - name: Release
-        uses: docker://antonyurchenko/git-release:v3.5.0
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DRAFT_RELEASE: "false"
-          PRE_RELEASE: "false"
-          CHANGELOG_FILE: "CHANGELOG.md"
-          ALLOW_EMPTY_CHANGELOG: "false"
-          ALLOW_TAG_PREFIX: "true"
-        with:
-          args: |
-            build/*.zip
 
       - name: Extract Git Tag
+        if: startsWith(github.ref, 'refs/tags/')
         run: echo "GIT_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
 
       - name: Log in to GitHub Docker Registry
         uses: docker/login-action@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
           registry: docker.pkg.github.com
           username: ${{ github.actor }}
@@ -52,6 +43,7 @@ jobs:
 
       - name: Build container image
         uses: docker/build-push-action@v2
+        if: startsWith(github.ref, 'refs/tags/')
         with:
           push: true
           tags: |
